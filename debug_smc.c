@@ -13,7 +13,7 @@
 
 MODULE_LICENSE("GPL");
 
-MODULE_AUTHOR("Mushahid Hussain");
+MODULE_AUTHOR("Mushahid Hussain, Osama Mohammad");
 
 MODULE_DESCRIPTION("A kernel module to debug an SMC from EL1(Linux Kerenl.");
 
