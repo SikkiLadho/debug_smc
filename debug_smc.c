@@ -26,22 +26,29 @@ MODULE_VERSION("0.1");
 #define PSCI_DEBUG_LEO		U(0xc400000A)
 
 
-static int __init hello_start(void)
+static int __init debug_start(void)
 {
 
-    printk(KERN_INFO "Loading Leo Debug module...\n");
 
     //moving values into smc with smc_fid in x0, see smc calling convention.
-    register uint64_t r0 __asm__("x0") = PSCI_DEBUG_LEO;
-    register uint64_t r1 __asm__("x1") = 1;
-    register uint64_t r2 __asm__("x2") = 2;
-    register uint64_t r3 __asm__("x3") = 3;
-    register uint64_t r4 __asm__("x4") = 4;
-    register uint64_t r5 __asm__("x5") = 5;
-    register uint64_t r6 __asm__("x6") = 6;
-    register uint64_t r7 __asm__("x7") = 7;
-
+    register uint64_t r0 __asm__("x0");
+    register uint64_t r1 __asm__("x1");
+    register uint64_t r2 __asm__("x2");
+    register uint64_t r3 __asm__("x3");
+    register uint64_t r4 __asm__("x4");
+    register uint64_t r5 __asm__("x5");
+    register uint64_t r6 __asm__("x6");
+    register uint64_t r7 __asm__("x7");
+    printk(KERN_ALERT "EL1: debug_smc kernel module loaded.\n");
+    printk(KERN_ALERT "EL1: making an SMC Call PSCI_DEBUG_LEO to EL3(Trusted Firmware-A).\n");
+    
    //making an smc call and saving output register values.
+    r0 = PSCI_DEBUG_LEO;
+    r1 = 1;
+    r2 = 2;
+    r3 = 3;
+    r4 = 4;
+
     __asm__ volatile(
 		"smc #0"
 		: /* Output registers, also used as inputs ('+' constraint). */
@@ -49,16 +56,15 @@ static int __init hello_start(void)
 		"+r"(r6), "+r"(r7));
 
     //printing register values
-    printk(KERN_EMERG, ",X0:%llx, X1:%llx,  X2:%llx,  X3:%llx,  X4:%llx,  X5:%llx, X6:%llx,  X7:%llx", r0,r1,r2,r3,r4,r5,r6,r7);
-
-   return 0;
+    printk(KERN_ALERT "EL1: Returning from SMC Call. Register Values: \nEL1: X0:%llx \nEL1: X1:%llx \nEL1: X2:%llx \nEL1: X3:%llx \nEL1: X4:%llx \n",r0, r1, r2, r3, r4);
+    return 0;
 }
 
-static void __exit hello_end(void)
+static void __exit debug_end(void)
 {
-    printk(KERN_INFO "Goodbye Mr.\n");
+    printk(KERN_ALERT "EL1: unloading debug_smc module.\n");
 }
 
-module_init(hello_start);
-module_exit(hello_end);
+module_init(debug_start);
+module_exit(debug_end);
 
