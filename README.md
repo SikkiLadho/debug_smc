@@ -6,7 +6,7 @@ debug_smc is kernel module to debug AARCH64 hypervisor exception trapping form E
 
 Make sure you have ARM-GNU compiler toolchain installed for AARCH64 and linux kernel source directory.
 
-#Compile
+# Compile
 
 Replace `path/to/kernel/source` with a path to linux kernel source directory.
 ```
@@ -14,6 +14,6 @@ git clone https://github.com/SikkiLadho/debug_smc.git
 make LINUX_PATH=path/to/kernel/source
 ```
 
-#Clean
+# Clean
 
 `make clean LINUX_PATH=/path/to/kernel/source`
